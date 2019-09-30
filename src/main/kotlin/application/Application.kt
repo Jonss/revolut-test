@@ -1,9 +1,8 @@
-package api
+package application
 
 import api.resources.accounts
-import application.AccountService
-import application.revolutModule
 import com.fasterxml.jackson.databind.SerializationFeature
+import infrastructure.repositories.config.FlywayConfig
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
@@ -12,7 +11,8 @@ import io.ktor.routing.routing
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>){
+    FlywayConfig().migrate()
     io.ktor.server.netty.EngineMain.main(args)
 }
 
@@ -21,6 +21,7 @@ fun Application.module() {
     install(ContentNegotiation) {
         jackson {
             enable(SerializationFeature.INDENT_OUTPUT)
+            enable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         }
     }
 
