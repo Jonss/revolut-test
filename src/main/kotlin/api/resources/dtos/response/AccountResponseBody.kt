@@ -1,4 +1,4 @@
-package api.resources.dtos
+package api.resources.dtos.response
 
 import java.util.*
 

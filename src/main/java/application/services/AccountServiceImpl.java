@@ -1,4 +1,4 @@
-package application;
+package application.services;
 
 import domain.models.Account;
 import infrastructure.repositories.AccountRepository;

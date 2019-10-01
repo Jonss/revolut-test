@@ -39,6 +39,8 @@ dependencies {
     testImplementation "com.h2database:h2:$h2_version"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.5.2"
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+
 
 }
 

@@ -1,6 +1,6 @@
 package domain.models;
 
-import api.resources.dtos.AccountResponseBody;
+import api.resources.dtos.response.AccountResponseBody;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;

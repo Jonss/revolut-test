@@ -1,6 +1,9 @@
 package application
 
 import api.resources.accounts
+import api.resources.deposit
+import application.services.AccountService
+import application.services.TransactionService
 import com.fasterxml.jackson.databind.SerializationFeature
 import infrastructure.repositories.config.FlywayConfig
 import io.ktor.application.Application
@@ -26,13 +29,17 @@ fun Application.module() {
     }
 
     install(Koin) {
-        modules(revolutModule)
+        modules(applicationModule)
     }
 
     val accountService: AccountService by inject()
+    val transactionService: TransactionService by inject()
 
     routing {
         accounts(accountService)
+        deposit(transactionService, accountService)
     }
 
 }
+
+

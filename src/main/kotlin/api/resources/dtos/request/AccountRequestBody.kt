@@ -1,4 +1,4 @@
-package api.resources.dtos
+package api.resources.dtos.request
 
 import domain.models.Account
 

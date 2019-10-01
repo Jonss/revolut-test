@@ -1,5 +1,6 @@
 package infrastructure.repositories;
 
+import application.exceptions.EntityNotFoundException;
 import domain.models.Account;
 import org.jdbi.v3.core.Jdbi;
 
@@ -37,16 +38,18 @@ public class AccountRepository {
 
     // TODO - Handle exception properly
     public Optional<Account> findAccountByEmail(String email) {
-        String query = "SELECT email, full_name, nick_name, phone_number, external_id, created_at " +
-                "FROM accounts WHERE email = :email;";
+        String query = "SELECT email, full_name, " +
+                "nick_name, phone_number, " +
+                "external_id, created_at " +
+                "FROM accounts " +
+                "WHERE email = :email;";
 
         try {
             return jdbi.withHandle(handle ->
                handle.createQuery(query).bind("email", email).mapToBean(Account.class).findFirst()
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new EntityNotFoundException("Account not found.");
         }
-        return Optional.empty();
     }
 }

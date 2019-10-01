@@ -1,7 +1,7 @@
 package api.resources
 
-import api.resources.dtos.AccountRequestBody
-import application.AccountService
+import api.resources.dtos.request.AccountRequestBody
+import application.services.AccountService
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
