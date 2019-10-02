@@ -71,4 +71,17 @@ public class Transaction {
     public Operation getOperation() {
         return operation;
     }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
+
 }

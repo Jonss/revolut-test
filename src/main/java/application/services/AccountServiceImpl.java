@@ -23,4 +23,14 @@ public class AccountServiceImpl implements AccountService {
     public Optional<Account> findAccount(String email) {
         return accountRepository.findAccountByEmail(email);
     }
+
+    @Override
+    public Optional<Account> findRevolutIssuer() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Account> findAccountById(String accountId) {
+        return accountRepository.findAccountByExternalId(accountId);
+    }
 }

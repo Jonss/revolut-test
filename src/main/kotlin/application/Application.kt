@@ -2,6 +2,7 @@ package application
 
 import api.resources.accounts
 import api.resources.deposit
+import api.resources.transactions
 import application.services.AccountService
 import application.services.TransactionService
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -38,6 +39,7 @@ fun Application.module() {
     routing {
         accounts(accountService)
         deposit(transactionService, accountService)
+        transactions(transactionService, accountService)
     }
 
 }

@@ -1,6 +1,7 @@
 package infrastructure.repositories;
 
-import application.exceptions.EntityNotFoundException;
+import domain.exceptions.AccountNotCreatedException;
+import domain.exceptions.EntityNotFoundException;
 import domain.models.Account;
 import org.jdbi.v3.core.Jdbi;
 
@@ -14,7 +15,6 @@ public class AccountRepository {
         this.jdbi = jdbi;
     }
 
-    // TODO - Handle exception properly
     public Account save(Account account) {
         String query = "INSERT INTO accounts" +
                 "(email, full_name, nick_name, phone_number, external_id, created_at)" +
@@ -31,12 +31,11 @@ public class AccountRepository {
                         .execute()
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new AccountNotCreatedException();
         }
         return account;
     }
 
-    // TODO - Handle exception properly
     public Optional<Account> findAccountByEmail(String email) {
         String query = "SELECT email, full_name, " +
                 "nick_name, phone_number, " +
@@ -47,6 +46,22 @@ public class AccountRepository {
         try {
             return jdbi.withHandle(handle ->
                handle.createQuery(query).bind("email", email).mapToBean(Account.class).findFirst()
+            );
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Account not found.");
+        }
+    }
+
+    public Optional<Account> findAccountByExternalId(String externalId) {
+        String query = "SELECT email, full_name, " +
+                "nick_name, phone_number, " +
+                "external_id, created_at " +
+                "FROM accounts " +
+                "WHERE external_id = :externalId";
+
+        try {
+            return jdbi.withHandle(handle ->
+                    handle.createQuery(query).bind("externalId", externalId).mapToBean(Account.class).findFirst()
             );
         } catch (Exception e) {
             throw new EntityNotFoundException("Account not found.");

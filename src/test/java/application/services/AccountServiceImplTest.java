@@ -1,7 +1,6 @@
-package application;
+package application.services;
 
-import application.exceptions.EntityNotFoundException;
-import application.services.AccountServiceImpl;
+import domain.exceptions.EntityNotFoundException;
 import domain.models.Account;
 import infrastructure.repositories.AccountRepository;
 import org.junit.Before;
@@ -53,7 +52,7 @@ public class AccountServiceImplTest {
 
     @Test
     public void shouldThrowExceptionWhenAccountIsNotFound() {
-        when(accountService.findAccount(Mockito.any())).thenThrow(EntityNotFoundException.class);
+        when(accountRepository.findAccountByEmail(Mockito.any())).thenThrow(EntityNotFoundException.class);
 
         assertThrows(EntityNotFoundException.class,
                 () -> accountService.findAccount("email@email.com")

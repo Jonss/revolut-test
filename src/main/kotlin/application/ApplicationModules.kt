@@ -1,10 +1,8 @@
 package application
 
-import application.services.AccountService
-import application.services.AccountServiceImpl
-import application.services.TransactionService
-import application.services.TransactionServiceImpl
+import application.services.*
 import infrastructure.repositories.AccountRepository
+import infrastructure.repositories.BalanceRepository
 import infrastructure.repositories.TransactionRepository
 import infrastructure.repositories.config.AppDataSource
 import org.koin.dsl.module
@@ -15,7 +13,11 @@ val applicationModule = module {
     single<AccountService> { AccountServiceImpl(get()) }
     single { AccountRepository(get()) }
 
-    single<TransactionService> { TransactionServiceImpl(get()) }
+    single<TransactionService> { TransactionServiceImpl(get(), get(), get()) }
     single { TransactionRepository(get()) }
+
+    single<BalanceService> { BalanceServiceImpl(get())}
+    single { BalanceRepository(get()) }
+
 }
 
