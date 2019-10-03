@@ -4,6 +4,7 @@ import api.resources.dtos.request.TransactionRequestBody
 import api.resources.dtos.response.TransactionResponseBody
 import application.services.AccountService
 import application.services.TransactionService
+import domain.exceptions.BalanceException
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.header
@@ -38,16 +39,21 @@ fun Routing.transactions(
                 return@post
             }
 
-            val transfer = transactionService.transfer(
-                requestBody.amount,
-                originAccount.get(),
-                destinyAccount.get(),
-                requestBody.currency
-            )
 
-            val transferResponseBody = transfer.map { TransactionResponseBody(it) }
+            try {
+                val transfer = transactionService.transfer(
+                    requestBody.amount,
+                    originAccount.get(),
+                    destinyAccount.get(),
+                    requestBody.currency
+                )
 
-            call.respond(HttpStatusCode.Created, transferResponseBody)
+                val transferResponseBody = transfer.map { TransactionResponseBody(it) }
+
+                call.respond(HttpStatusCode.Created, transferResponseBody)
+            } catch (e: BalanceException) {
+                call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to e.message))
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package infrastructure.repositories.config;
+package infrastructure.config;
 
 import org.flywaydb.core.Flyway;
 

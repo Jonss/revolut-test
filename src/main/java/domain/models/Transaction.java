@@ -1,5 +1,10 @@
 package domain.models;
 
+import api.resources.dtos.response.CurrencyDTO;
+import api.resources.dtos.response.DepositResponseBody;
+import api.resources.dtos.response.DepositValueResponse;
+import api.resources.dtos.response.SimpleAccountResponse;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -84,4 +89,12 @@ public class Transaction {
         this.operation = operation;
     }
 
+    public DepositResponseBody toDepositResponseBody() {
+        SimpleAccountResponse origin = new SimpleAccountResponse(this.origin.getFullName(), this.origin.getEmail());
+        SimpleAccountResponse destiny = new SimpleAccountResponse(this.destiny.getFullName(), this.destiny.getEmail());
+        CurrencyDTO currencyDTO = new CurrencyDTO(this.currency.name(), this.currency.getSymbol(), this.currency.getFullName());
+        DepositValueResponse depositValueResponse = new DepositValueResponse(this.amount, currencyDTO);
+
+        return new DepositResponseBody(depositValueResponse, origin, destiny, this.createdAt);
+    }
 }

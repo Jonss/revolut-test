@@ -49,4 +49,5 @@ public class Balance {
     public void setCurrency(Currency currency) {
         this.currency = currency;
     }
+
 }

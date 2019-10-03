@@ -32,6 +32,8 @@ fun Routing.deposit(
             Currency.valueOf(depositRequestBody.value.currency)
         )
 
-        call.respond(HttpStatusCode.Created, deposit)
+        val depositResponseBody = deposit.toDepositResponseBody()
+
+        call.respond(HttpStatusCode.Created, depositResponseBody)
     }
 }

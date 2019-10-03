@@ -18,9 +18,13 @@ fun Routing.accounts(accountService: AccountService) {
             val accountRequestBody = call.receive<AccountRequestBody>()
             val account = accountRequestBody.toAccount()
 
-            accountService.createAccount(account)
+            try {
+                accountService.createAccount(account)
 
-            call.respond(HttpStatusCode.Created, account.toAccountResponse())
+                call.respond(HttpStatusCode.Created, account.toAccountResponse())
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "e.message"))
+            }
         }
 
         get("/{email}") {

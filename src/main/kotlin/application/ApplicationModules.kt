@@ -1,10 +1,12 @@
 package application
 
 import application.services.*
+import com.fasterxml.jackson.databind.ObjectMapper
 import infrastructure.repositories.AccountRepository
 import infrastructure.repositories.BalanceRepository
 import infrastructure.repositories.TransactionRepository
-import infrastructure.repositories.config.AppDataSource
+import infrastructure.config.AppDataSource
+import infrastructure.providers.JsonProvider
 import org.koin.dsl.module
 
 val applicationModule = module {
@@ -19,5 +21,6 @@ val applicationModule = module {
     single<BalanceService> { BalanceServiceImpl(get())}
     single { BalanceRepository(get()) }
 
+    single<ObjectMapper> { JsonProvider().objectMapper() }
 }
 

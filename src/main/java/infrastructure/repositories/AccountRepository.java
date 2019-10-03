@@ -31,6 +31,7 @@ public class AccountRepository {
                         .execute()
             );
         } catch (Exception e) {
+            e.printStackTrace();
             throw new AccountNotCreatedException();
         }
         return account;

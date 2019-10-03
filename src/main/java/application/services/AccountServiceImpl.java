@@ -26,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<Account> findRevolutIssuer() {
-        return Optional.empty();
+        return accountRepository.findAccountByEmail("issuer@revolut.co.uk");
     }
 
     @Override

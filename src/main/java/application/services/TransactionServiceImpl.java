@@ -29,15 +29,19 @@ public class TransactionServiceImpl implements TransactionService {
         if(!revolutIssuer.isPresent())
             throw new EntityNotFoundException("Issuer not found.");
 
-        Transaction transaction = new Transaction(amount, account, revolutIssuer.get(), Operation.SAVING, currency);
+        Transaction transaction = new Transaction(amount,revolutIssuer.get(), account, Operation.SAVING, currency);
         transactionRepository.save(transaction);
+        balanceService.updateBalance(transaction);
         return transaction;
     }
 
     @Override
     public List<Transaction> transfer(Long amount, Account origin, Account destiny, Currency currency) {
+
         Balance balance = balanceService.findBalance(origin, currency);
-        if(balance.getTotal() < amount) {
+        System.out.println(balance);
+
+        if(hasNoBalance(amount, balance)) {
             throw new BalanceException();
         }
 
@@ -50,5 +54,9 @@ public class TransactionServiceImpl implements TransactionService {
                 forEach(t -> transactionRepository.save(t));
 
         return transactions;
+    }
+
+    private boolean hasNoBalance(Long amount, Balance balance) {
+        return balance.getTotal() == null || balance.getTotal() < amount;
     }
 }

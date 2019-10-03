@@ -40,6 +40,9 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.5.2"
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
+    
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0"
+
 
 
 }

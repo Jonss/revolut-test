@@ -23,6 +23,6 @@ class BalanceServiceImpl(private val balanceRepository: BalanceRepository): Bala
 
 
     override fun updateBalance(transaction: Transaction) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        balanceRepository
     }
 }

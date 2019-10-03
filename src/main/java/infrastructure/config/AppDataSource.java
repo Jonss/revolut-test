@@ -1,4 +1,4 @@
-package infrastructure.repositories.config;
+package infrastructure.config;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.jdbi.v3.core.Jdbi;
