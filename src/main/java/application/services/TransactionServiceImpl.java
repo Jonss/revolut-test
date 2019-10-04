@@ -18,20 +18,23 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionServiceImpl(TransactionRepository transactionRepository,
                                   AccountService accountService,
                                   BalanceService balanceService) {
+        this.balanceService = balanceService;
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
-        this.balanceService = balanceService;
     }
 
     @Override
     public Transaction deposit(Long amount, Account account, Currency currency) {
+
         Optional<Account> revolutIssuer = accountService.findRevolutIssuer();
+
         if(!revolutIssuer.isPresent())
             throw new EntityNotFoundException("Issuer not found.");
 
         Transaction transaction = new Transaction(amount,revolutIssuer.get(), account, Operation.SAVING, currency);
+
         transactionRepository.save(transaction);
-        balanceService.updateBalance(transaction);
+        balanceService.append(transaction);
         return transaction;
     }
 
@@ -39,19 +42,21 @@ public class TransactionServiceImpl implements TransactionService {
     public List<Transaction> transfer(Long amount, Account origin, Account destiny, Currency currency) {
 
         Balance balance = balanceService.findBalance(origin, currency);
-        System.out.println(balance);
 
         if(hasNoBalance(amount, balance)) {
             throw new BalanceException();
         }
 
-        Transaction transfer = new Transaction(amount, origin, destiny, Operation.TRANSFER, currency);
-        Transaction withdrawal = new Transaction(amount, destiny, origin, Operation.WITHDRAWAL, currency);
+        Transaction withdrawal = new Transaction(amount, origin, destiny, Operation.TRANSFER, currency);
+        Transaction transfer = new Transaction(amount, destiny, origin, Operation.WITHDRAWAL, currency);
 
         List<Transaction> transactions = Arrays.asList(transfer, withdrawal);
 
-        transactions.
-                forEach(t -> transactionRepository.save(t));
+        transactions.stream()
+                .map(t -> {
+                    transactionRepository.save(t);
+                    return t;
+                }).forEach(t -> balanceService.append(t));
 
         return transactions;
     }

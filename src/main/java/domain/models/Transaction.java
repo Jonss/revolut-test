@@ -97,4 +97,19 @@ public class Transaction {
 
         return new DepositResponseBody(depositValueResponse, origin, destiny, this.createdAt);
     }
+
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", origin=" + origin +
+                ", destiny=" + destiny +
+                ", createdAt=" + createdAt +
+                ", externalId=" + externalId +
+                ", operation=" + operation +
+                ", currency=" + currency +
+                '}';
+    }
 }

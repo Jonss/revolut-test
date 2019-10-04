@@ -32,13 +32,13 @@ fun Routing.transactions(
             }
 
             val requestBody = call.receive<TransactionRequestBody>()
+
             val destinyAccount = accountService.findAccount(requestBody.destiny.email)
 
-            if(originAccount.isPresent.not()) {
+            if(destinyAccount.isPresent.not()) {
                 call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "Destiny Account not found."))
                 return@post
             }
-
 
             try {
                 val transfer = transactionService.transfer(
@@ -55,6 +55,7 @@ fun Routing.transactions(
                 call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to e.message))
             }
         }
+
     }
 
 

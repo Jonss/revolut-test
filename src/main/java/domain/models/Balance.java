@@ -3,19 +3,28 @@ package domain.models;
 import java.time.LocalDateTime;
 
 public class Balance {
+    private Long id;
     private Long total;
     private LocalDateTime lastDeposit;
-    private Account account;
+    private Long accountId;
     private Currency currency;
 
     public Balance() {
     }
 
-    public Balance(Long total, LocalDateTime lastDeposit, Account account, Currency currency) {
+    public Balance(Long total, LocalDateTime lastDeposit, Long accountId, Currency currency) {
         this.total = total;
         this.lastDeposit = lastDeposit;
-        this.account = account;
+        this.accountId = accountId;
         this.currency = currency;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getTotal() {
@@ -34,14 +43,6 @@ public class Balance {
         this.lastDeposit = lastDeposit;
     }
 
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
     public Currency getCurrency() {
         return currency;
     }
@@ -50,4 +51,21 @@ public class Balance {
         this.currency = currency;
     }
 
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
+
+    @Override
+    public String toString() {
+        return "Balance{" +
+                "total=" + total +
+                ", lastDeposit=" + lastDeposit +
+                ", accountId=" + accountId +
+                ", currency=" + currency +
+                '}';
+    }
 }

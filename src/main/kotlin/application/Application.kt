@@ -15,17 +15,19 @@ import io.ktor.jackson.JacksonConverter
 import io.ktor.routing.routing
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import javax.sql.DataSource
 
-fun main(args: Array<String>){
-    FlywayConfig().migrate()
-    io.ktor.server.netty.EngineMain.main(args)
-}
+fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
-
     install(Koin) {
         modules(applicationModule)
     }
+
+    val dataSource: DataSource by inject()
+
+    FlywayConfig().migrate(dataSource)
+
 
     val objectMapper: ObjectMapper by inject()
 
@@ -34,9 +36,7 @@ fun Application.module() {
             ContentType.Application.Json,
             JacksonConverter(objectMapper)
         )
-
     }
-
 
     val accountService: AccountService by inject()
     val transactionService: TransactionService by inject()

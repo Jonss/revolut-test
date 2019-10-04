@@ -6,7 +6,7 @@ import org.jdbi.v3.core.Jdbi;
 
 public class TransactionRepository {
 
-    private final Jdbi jdbi;
+    private Jdbi jdbi;
 
     public TransactionRepository(Jdbi jdbi) {
         this.jdbi = jdbi;

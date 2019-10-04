@@ -13,6 +13,6 @@ public interface BalanceService {
 
     List<Balance> findAllBalance(Account account);
 
-    void updateBalance(Transaction transaction);
+    void append(Transaction transaction);
 
 }

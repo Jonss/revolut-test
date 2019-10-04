@@ -40,10 +40,12 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine:5.5.2"
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
-    
+
+    implementation "com.zaxxer:HikariCP:2.6.1"
+
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0"
 
-
+    implementation "io.netty:netty-transport-native-epoll:4.0.47.Final:linux-x86_64"
 
 }
 

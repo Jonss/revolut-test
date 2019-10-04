@@ -4,19 +4,19 @@ public enum Currency {
     GBP("Pound Sterling", "£"),
     BRL("Brazilian Real", "R$");
 
-    private final String name;
+    private final String fullName;
     private final String symbol;
 
     Currency(String name, String symbol) {
-        this.name = name;
+        this.fullName = name;
         this.symbol = symbol;
     }
 
     public String getSymbol() {
-        return this.name;
+        return this.symbol;
     }
 
     public String getFullName() {
-        return name;
+        return fullName;
     }
 }

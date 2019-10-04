@@ -1,5 +1,5 @@
 CREATE TABLE accounts (
-    id INT(11) UNSIGNED AUTO_INCREMENT,
+    id INTEGER auto_increment PRIMARY KEY,
     email VARCHAR(120) NOT NULL UNIQUE,
     full_name VARCHAR(255) NOT NULL,
     nick_name VARCHAR(120) NOT NULL,

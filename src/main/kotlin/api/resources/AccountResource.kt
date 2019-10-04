@@ -23,7 +23,7 @@ fun Routing.accounts(accountService: AccountService) {
 
                 call.respond(HttpStatusCode.Created, account.toAccountResponse())
             } catch (e: Exception) {
-                call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "e.message"))
+                call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to e.message))
             }
         }
 

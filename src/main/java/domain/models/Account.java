@@ -25,6 +25,10 @@ public class Account {
     public Account() {
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
@@ -80,5 +84,18 @@ public class Account {
     @NotNull
     public AccountResponseBody toAccountResponse() {
         return new AccountResponseBody(this.email, this.fullName, this.externalId);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", externalId=" + externalId +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

@@ -38,7 +38,7 @@ public class AccountRepository {
     }
 
     public Optional<Account> findAccountByEmail(String email) {
-        String query = "SELECT email, full_name, " +
+        String query = "SELECT id, email, full_name, " +
                 "nick_name, phone_number, " +
                 "external_id, created_at " +
                 "FROM accounts " +
@@ -54,7 +54,7 @@ public class AccountRepository {
     }
 
     public Optional<Account> findAccountByExternalId(String externalId) {
-        String query = "SELECT email, full_name, " +
+        String query = "SELECT id, email, full_name, " +
                 "nick_name, phone_number, " +
                 "external_id, created_at " +
                 "FROM accounts " +

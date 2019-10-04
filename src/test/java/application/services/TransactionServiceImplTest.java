@@ -41,14 +41,11 @@ public class TransactionServiceImplTest {
         Account origin = new AccountStub().regularAccount().get();
         Account destiny = new AccountStub().regularAccount().get();
 
-        when(balanceService.findBalance(origin, BRL)).thenReturn(new Balance(3000L, now(), origin, BRL));
+        when(balanceService.findBalance(origin, BRL)).thenReturn(new Balance(3000L, now(), origin.getId(), BRL));
 
         assertThrows(BalanceException.class, () ->
                 transactionService.transfer(3001L, origin, destiny, BRL)
         );
     }
-
-
-
 
 }
