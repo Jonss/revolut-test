@@ -3,14 +3,17 @@ package stubs;
 import domain.models.Account;
 
 import java.util.Optional;
+import java.util.Random;
 
 public class AccountStub {
-    public Optional<Account> regularAccount() {
+
+
+    public Optional<Account> build() {
         Account account = new Account(
-                "email@email.com",
+                String.valueOf(new Random().nextInt()),
                 "My FullName",
                 "full",
-                "+55 11 999999999");
+                String.valueOf(new Random().nextInt()));
         return Optional.of(account);
     }
 }

@@ -44,8 +44,8 @@ public class TransactionServiceImplTest {
 
     @Test
     public void shouldThrowExceptionWhenBalanceIsBelowAmount() {
-        Account origin = new AccountStub().regularAccount().get();
-        Account destiny = new AccountStub().regularAccount().get();
+        Account origin = new AccountStub().build().get();
+        Account destiny = new AccountStub().build().get();
 
         when(balanceService.findBalance(origin, BRL)).thenReturn(new Balance(3000L, now(), origin.getId(), BRL));
 
@@ -56,8 +56,8 @@ public class TransactionServiceImplTest {
 
     @Test
     public void shouldTransferToDestinyAccountWhenAccountHasBalance() {
-        Account origin = new AccountStub().regularAccount().get();
-        Account destiny = new AccountStub().regularAccount().get();
+        Account origin = new AccountStub().build().get();
+        Account destiny = new AccountStub().build().get();
 
         when(balanceService.findBalance(origin, BRL)).thenReturn(new Balance(3000L, now(), origin.getId(), BRL));
 

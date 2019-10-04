@@ -36,7 +36,7 @@ public class AccountServiceImplTest {
     @Test
     public void shouldFindAccountByEmail() {
         when(accountRepository.findAccountByEmail("email@email.com"))
-                .thenReturn(new AccountStub().regularAccount());
+                .thenReturn(new AccountStub().build());
 
         Optional<Account> optionalAccount = accountService.findAccount("email@email.com");
         assertTrue(optionalAccount.isPresent());

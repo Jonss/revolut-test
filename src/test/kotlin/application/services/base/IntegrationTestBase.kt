@@ -1,29 +1,35 @@
 package application.services.base
 
-import application.services.AccountService
-import application.services.AccountServiceImpl
 import infrastructure.config.AppDataSource
 import infrastructure.config.FlywayConfig
 import infrastructure.repositories.AccountRepository
 import infrastructure.repositories.BalanceRepository
 import infrastructure.repositories.TransactionRepository
 import org.jdbi.v3.core.Jdbi
+import org.junit.jupiter.api.BeforeEach
 import javax.sql.DataSource
 
 open class IntegrationTestBase {
 
-    val transactionRepository: TransactionRepository = TransactionRepository(jdbiTest())
-    val accountRepository: AccountRepository = AccountRepository(jdbiTest())
-    val balanceRepository: BalanceRepository = BalanceRepository(jdbiTest())
+    lateinit var accountRepository: AccountRepository
+    lateinit var transactionRepository: TransactionRepository
+    lateinit var balanceRepository: BalanceRepository
 
-    private fun testDataSource(): DataSource {
+    @BeforeEach
+    fun init() {
+        accountRepository = AccountRepository(jdbiTest())
+        transactionRepository = TransactionRepository(jdbiTest())
+        balanceRepository = BalanceRepository(jdbiTest())
+    }
+
+    fun testDataSource(): DataSource {
         return AppDataSource().dataSource()
     }
 
-    private fun jdbiTest(): Jdbi {
+    fun jdbiTest(): Jdbi {
         return Jdbi.create(testDataSource())
     }
 
-    private fun migrate() = FlywayConfig().migrate(testDataSource())
+    fun migrate() = FlywayConfig().migrate(testDataSource())
 
 }
