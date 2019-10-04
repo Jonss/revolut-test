@@ -1,40 +1,61 @@
-# Revolut test
-
 ### Purpose:
+
+This is a home task for Revolut job application. 
+
 
 ### How to run?
 
+You can start the main method in Application.kt, or generate a jar with `./gradlew build` the run `java -jar build/libs/revolut-test-1.0-SNAPSHOT.jar`.
+
 ### Considerations:
 
+- I used Ktor[https://ktor.io/] in webservice layer, using Koin[https://insert-koin.io/] to handle DI. The other parts of application where written mostly in Java.
+- For persistence, I used jdbc, using a lib called Jdbi.
 
-POST /accounts HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-Cache-Control: no-cache
-Postman-Token: a3cc0fdd-e5df-326d-f8c4-5000233bd0d6
+- The idea is, when a transaction is created, a new row in balance table is created. It will add or subtract from latest total before operation, then on next operation this new balance will be the source of truth.
+- The amount is in cents. Even cryptocurrency would work, handling satoshis in BTC for instance.
 
-{
-	"full_name": "João Santana",
-	"nick_name": "Jonss",
-	"email": "joaosantana@mail.com",
-	"phone_number": "+55 11 999999999999"
-}
+*** 
+- Yet about transaction, my idea was handle a transaction as an event. Receive a transaction, add a new row and subtract. To handle concurrency I intended to verify asynchronously if the balance is positive or zero. 
+If two transactions where effectivate at same time, with an old balance, I want to make a new transaction, cancelling the last transaction persisted with a refund status. I had no time to code this verification feature =/.
 
+## Requests:
 
-GET /accounts/joaosantana.ti@gmail.com HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-Cache-Control: no-cache
-Postman-Token: 447c15f9-73fc-5c7e-a0d2-9a4f758689e0
+#### Create account
+```
+curl -X POST
+    http://localhost:8080/accounts \
+    -H 'Content-Type: application/json' \
+-d '{
+	    "full_name": "João Santana",
+	    "nick_name": "Jonss",
+	    "email": "joao.santana@mail.com",
+	    "phone_number": "+55 11 999999999"
+    }'
 
+curl -X POST
+    http://localhost:8080/accounts \
+    -H 'Content-Type: application/json' \
+-d '{
+	    "full_name": "Jupiter Stein",
+	    "nick_name": "jupineo",
+	    "email": "jupiter.stein@mail.com",
+	    "phone_number": "+55 11 888888888"
+    }'
+```
 
-POST /deposit HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-Cache-Control: no-cache
-Postman-Token: 94e75247-b16c-596a-6084-1298d87ed65e
+#### Get account by email
+```
+curl -X GET http://localhost:8080/accounts/{email-registered} \
+    -H 'Content-Type: application/json'
+```
 
-{
+#### Deposit value for account 
+
+```
+curl -X POST http://localhost:8080/deposit \
+-H 'Content-Type: application/json' \
+-d '{
 	"value": {
 		"amount": 10000,
 		"currency": "BRL"
@@ -42,32 +63,20 @@ Postman-Token: 94e75247-b16c-596a-6084-1298d87ed65e
 	"account": {
 		"email": "joaosantana.ti@gmail.com"
 	}
-}
+}'
+```
 
-POST /accounts HTTP/1.1
-Host: localhost:8080
-Content-Type: application/json
-Cache-Control: no-cache
-Postman-Token: 7b6511c0-32cc-669c-664b-959a4657efa6
+#### Transfer values for other users
 
-{
-	"full_name": "Júpiter Stein",
-	"nick_name": "Júpi",
-	"email": "jupiter.stein@gmail.com",
-	"phone_number": "+55 11 9999999"
-}
-
-POST /transactions/transfer HTTP/1.1
-Host: localhost:8080
-x-account-id: 8333c892-954a-442a-a320-d6ab963d726f
-Content-Type: application/json
-Cache-Control: no-cache
-Postman-Token: 70818b54-fd5a-9278-32c4-deb1334a3af1
-
-{
-	"amount": 1299,
-	"currency": "BRL",
-	"destiny": {
-		"email": "jupiter.stein@gmail.com"
-	}
-}
+```
+curl -X POST \
+  http://localhost:8080/transactions/transfer \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "amount": 1299,
+        "currency": "BRL",
+        "destiny": {
+            "email": "jupiter.stein@mail.com"
+        }
+    }'
+```
