@@ -1,6 +1,8 @@
+
 buildscript {
     dependencies {
         classpath 'com.h2database:h2:1.4.199'
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4"
     }
 }
 
@@ -13,6 +15,7 @@ plugins {
 
 group 'jonss.com.github'
 version '1.0-SNAPSHOT'
+apply plugin: 'application'
 
 sourceCompatibility = 1.8
 
@@ -20,6 +23,10 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url 'https://kotlin.bintray.com/ktor' }
+}
+
+configurations {
+    ktlint
 }
 
 dependencies {
@@ -43,6 +50,24 @@ dependencies {
 
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
+
+    ktlint "com.pinterest:ktlint:0.34.2"
+}
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "src/**/*.kt"
+}
+
+check.dependsOn ktlint
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
 }
 
 
@@ -56,4 +81,14 @@ compileTestKotlin {
 
 test {
     useJUnitPlatform()
+}
+
+// To run Shadow
+mainClassName = 'io.ktor.server.netty.EngineMain'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+runShadow {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
