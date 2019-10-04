@@ -49,7 +49,6 @@ public class AccountServiceImplTest {
         assertThat(account.getPhoneNumber(), is("+55 11 999999999"));
     }
 
-
     @Test
     public void shouldThrowExceptionWhenAccountIsNotFound() {
         when(accountRepository.findAccountByEmail(Mockito.any())).thenThrow(EntityNotFoundException.class);

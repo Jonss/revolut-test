@@ -5,6 +5,6 @@ public class TransactionNotExecutedException extends RuntimeException {
         super(message);
     }
     public TransactionNotExecutedException() {
-        super("Transaction not excecuted. Try again later.");
+        super("Transaction not executed. Try again later.");
     }
 }

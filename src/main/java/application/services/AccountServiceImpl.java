@@ -2,11 +2,14 @@ package application.services;
 
 import domain.models.Account;
 import infrastructure.repositories.AccountRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 public class AccountServiceImpl implements AccountService {
 
+    private Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private AccountRepository accountRepository;
 
@@ -16,6 +19,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(Account account) {
+        logger.info("Creating new account");
         return accountRepository.save(account);
     }
 

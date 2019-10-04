@@ -23,6 +23,5 @@ val applicationModule = module {
 
     single { JsonProvider().objectMapper() }
 
-
 }
 

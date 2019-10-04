@@ -4,12 +4,16 @@ import domain.exceptions.BalanceException;
 import domain.exceptions.EntityNotFoundException;
 import domain.models.*;
 import infrastructure.repositories.TransactionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class TransactionServiceImpl implements TransactionService {
+
+    private Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
 
     private TransactionRepository transactionRepository;
     private AccountService accountService;
@@ -40,12 +44,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<Transaction> transfer(Long amount, Account origin, Account destiny, Currency currency) {
-
         Balance balance = balanceService.findBalance(origin, currency);
 
         if(hasNoBalance(amount, balance)) {
             throw new BalanceException();
         }
+
+        logger.info("Transfer {} {} from [{}] to [{}]", currency, amount, origin.getExternalId(), destiny.getExternalId());
 
         Transaction withdrawal = new Transaction(amount, origin, destiny, Operation.TRANSFER, currency);
         Transaction transfer = new Transaction(amount, destiny, origin, Operation.WITHDRAWAL, currency);
@@ -53,10 +58,8 @@ public class TransactionServiceImpl implements TransactionService {
         List<Transaction> transactions = Arrays.asList(transfer, withdrawal);
 
         transactions.stream()
-                .map(t -> {
-                    transactionRepository.save(t);
-                    return t;
-                }).forEach(t -> balanceService.append(t));
+                .peek(t -> transactionRepository.save(t))
+                .forEach(t -> balanceService.append(t));
 
         return transactions;
     }

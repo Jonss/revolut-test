@@ -6,6 +6,8 @@ import domain.models.Currency;
 import domain.models.Transaction;
 import org.jdbi.v3.core.Jdbi;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,15 +15,15 @@ import java.util.List;
 
 public class BalanceRepository {
 
+    private Logger logger = LoggerFactory.getLogger(BalanceRepository.class);
+
     private Jdbi jdbi;
 
     public BalanceRepository(Jdbi jdbi) {
         this.jdbi = jdbi;
     }
 
-    // TODO Handle optional
     public Balance findBalance(@NotNull Account account, Currency currency) {
-
         try {
             String query = "SELECT * FROM balances WHERE account_id = :accountId " +
                     "AND currency = :currency ORDER BY last_deposit DESC LIMIT 1";
@@ -35,6 +37,7 @@ public class BalanceRepository {
 
             return balances.stream().findFirst().get();
         } catch (Exception e) {
+            logger.info("Account [{}] has no balance.", account.getExternalId());
             return new Balance(0L, null, 0L, currency);
         }
     }
@@ -55,8 +58,7 @@ public class BalanceRepository {
         }
     }
 
-
-    public int updateBalance(Transaction transaction) {
+    public void append(Transaction transaction) {
         try {
             String query = "INSERT INTO balances(total, last_deposit, account_id, currency) VALUES" +
                     "(:total, :lastDeposit, :accountId, :currency);";
@@ -66,7 +68,7 @@ public class BalanceRepository {
 
             Balance balance = new Balance(latestBalance.getTotal() + transaction.getAmount(), LocalDateTime.now(), account.getId(), transaction.getCurrency());
 
-            return jdbi.withHandle(handle ->
+            jdbi.withHandle(handle ->
                     handle.createUpdate(query)
                             .bind("total", balance.getTotal())
                             .bind("lastDeposit", balance.getLastDeposit())
@@ -75,9 +77,9 @@ public class BalanceRepository {
                             .execute());
 
         } catch (Exception e) {
+            logger.error("Could not append amount [{}] to account [{}]", transaction.getAmount(), transaction.getDestiny().getExternalId());
             throw e;
         }
     }
 
 }
-
