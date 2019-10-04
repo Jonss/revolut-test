@@ -1,6 +1,11 @@
 package application
 
-import application.services.*
+import application.services.AccountService
+import application.services.AccountServiceImpl
+import application.services.BalanceService
+import application.services.BalanceServiceImpl
+import application.services.TransactionService
+import application.services.TransactionServiceImpl
 import infrastructure.config.AppDataSource
 import infrastructure.providers.JsonProvider
 import infrastructure.repositories.AccountRepository
@@ -18,10 +23,8 @@ val applicationModule = module {
     single<TransactionService> { TransactionServiceImpl(get(), get(), get()) }
     single { TransactionRepository(AppDataSource().create(get())) }
 
-    single<BalanceService> { BalanceServiceImpl(get())}
+    single<BalanceService> { BalanceServiceImpl(get()) }
     single { BalanceRepository(AppDataSource().create(get())) }
 
     single { JsonProvider().objectMapper() }
-
 }
-
