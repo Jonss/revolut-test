@@ -16,7 +16,7 @@ public class AppDataSource {
     // TODO get env vars from application.conf
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;" );
+        config.setJdbcUrl("jdbc:h2:mem:revolut_db;DB_CLOSE_DELAY=-1" );
         config.setUsername("sa");
         config.setPassword("sa");
         config.addDataSourceProperty("cachePrepStmts" , "true");
@@ -24,5 +24,14 @@ public class AppDataSource {
         config.addDataSourceProperty("prepStmtCacheSqlLimit" , "2048");
         return new HikariDataSource( config );
     }
+
+    public DataSource dataSourceTest() {
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:h2:mem:test;" );
+        config.setUsername("sa");
+        config.setPassword("sa");
+        return new HikariDataSource( config );
+    }
+
 
 }

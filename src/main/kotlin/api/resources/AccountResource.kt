@@ -32,7 +32,7 @@ fun Routing.accounts(accountService: AccountService) {
 
             val account = accountService.findAccount(email)
 
-            if(account.isPresent) {
+            if (account.isPresent) {
                 call.respond(HttpStatusCode.OK, account.get().toAccountResponse())
                 return@get
             }
@@ -40,5 +40,4 @@ fun Routing.accounts(accountService: AccountService) {
             call.respond(HttpStatusCode.NotFound, mapOf("error" to "Account not found."))
         }
     }
-
 }

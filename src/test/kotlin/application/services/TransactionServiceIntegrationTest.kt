@@ -3,15 +3,14 @@ package application.services
 import application.services.base.IntegrationTestBase
 import domain.exceptions.BalanceException
 import domain.models.Currency
+import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import stubs.AccountStub
-import java.lang.ArithmeticException
 
-
-open class TransactionServiceIntegrationTest: IntegrationTestBase() {
+open class TransactionServiceIntegrationTest : IntegrationTestBase() {
 
     private lateinit var transactionService: TransactionService
     private lateinit var accountService: AccountService
@@ -25,14 +24,15 @@ open class TransactionServiceIntegrationTest: IntegrationTestBase() {
         transactionService = TransactionServiceImpl(transactionRepository, accountService, balanceService)
     }
 
-
     @Test
-    fun `should deposit 1000 BRL to user and verify balance`() {
+    suspend fun `should deposit 1000 BRL to user and verify balance`() {
         val createAccount = accountService.createAccount(AccountStub().build().get())
 
         val foundAccount = accountService.findAccountById(createAccount.externalId.toString()).get()
 
         transactionService.deposit(1000L, foundAccount, Currency.BRL)
+
+        delay(500)
 
         val findBalance = balanceService.findBalance(foundAccount, Currency.BRL)
 
@@ -40,9 +40,8 @@ open class TransactionServiceIntegrationTest: IntegrationTestBase() {
         assertEquals(Currency.BRL, findBalance.currency)
     }
 
-
     @Test
-    fun `should deposit 1000 BRL to first user and transfer to another user`() {
+    suspend fun `should deposit 1000 BRL to first user and transfer to another user`() {
         val originAccountStub = AccountStub().build().get()
         val destinyAccountStub = AccountStub().build().get()
 
@@ -56,6 +55,8 @@ open class TransactionServiceIntegrationTest: IntegrationTestBase() {
 
         transactionService.transfer(400, foundOriginAccount, foundDestinyAccount, Currency.BRL)
 
+        delay(500)
+
         val findOriginBalance = balanceService.findBalance(foundOriginAccount, Currency.BRL)
 
         val findDestinyBalance = balanceService.findBalance(foundDestinyAccount, Currency.BRL)
@@ -65,7 +66,6 @@ open class TransactionServiceIntegrationTest: IntegrationTestBase() {
         assertEquals(400, findDestinyBalance.total)
         assertEquals(Currency.BRL, findDestinyBalance.currency)
     }
-
 
     @Test
     fun `should throw Exception when user try to transfer GBP when user has no balance`() {
@@ -82,5 +82,4 @@ open class TransactionServiceIntegrationTest: IntegrationTestBase() {
             transactionService.transfer(1000000, foundOriginAccount, foundDestinyAccount, Currency.GBP)
         }
     }
-
 }

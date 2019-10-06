@@ -9,11 +9,10 @@ data class AccountRequestBody(
     val phoneNumber: String
 ) {
 
-    fun toAccount()  = Account(
+    fun toAccount() = Account(
         this.email,
         this.fullName,
         this.nickName,
         this.phoneNumber
     )
-
 }

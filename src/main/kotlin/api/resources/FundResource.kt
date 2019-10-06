@@ -11,17 +11,17 @@ import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
 
-fun Routing.deposit(
+fun Routing.fund(
     transactionService: TransactionService,
     accountService: AccountService
 ) {
-    post("/deposit") {
+    post("/fund") {
 
         val depositRequestBody = call.receive<DepositRequestBody>()
 
         val account = accountService.findAccount(depositRequestBody.account.email)
 
-        if(account.isPresent.not()) {
+        if (account.isPresent.not()) {
             call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "Account Destiny not found."))
             return@post
         }

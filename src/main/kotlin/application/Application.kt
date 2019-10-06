@@ -1,7 +1,7 @@
 package application
 
 import api.resources.accounts
-import api.resources.deposit
+import api.resources.fund
 import api.resources.transactions
 import application.services.AccountService
 import application.services.TransactionService
@@ -13,9 +13,9 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.jackson.JacksonConverter
 import io.ktor.routing.routing
+import javax.sql.DataSource
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
-import javax.sql.DataSource
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 
@@ -27,7 +27,6 @@ fun Application.module() {
     val dataSource: DataSource by inject()
 
     FlywayConfig().migrate(dataSource)
-
 
     val objectMapper: ObjectMapper by inject()
 
@@ -43,10 +42,7 @@ fun Application.module() {
 
     routing {
         accounts(accountService)
-        deposit(transactionService, accountService)
+        fund(transactionService, accountService)
         transactions(transactionService, accountService)
     }
-
 }
-
-

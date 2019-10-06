@@ -5,7 +5,6 @@ import domain.models.Balance;
 import domain.models.Currency;
 import domain.models.Transaction;
 import org.jdbi.v3.core.Jdbi;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +15,13 @@ import java.util.List;
 public class BalanceRepository {
 
     private Logger logger = LoggerFactory.getLogger(BalanceRepository.class);
-
     private Jdbi jdbi;
 
     public BalanceRepository(Jdbi jdbi) {
         this.jdbi = jdbi;
     }
 
-    public Balance findBalance(@NotNull Account account, Currency currency) {
+    public Balance findBalance(Account account, Currency currency) {
         try {
             String query = "SELECT * FROM balances WHERE account_id = :accountId " +
                     "AND currency = :currency ORDER BY last_deposit DESC LIMIT 1";
@@ -42,8 +40,7 @@ public class BalanceRepository {
         }
     }
 
-    @NotNull
-    public List<Balance> findAllBalance(@NotNull Account account) {
+    public List<Balance> findAllBalance(Account account) {
         try {
             String query = "SELECT * FROM balances WHERE account_id = :accountId";
 

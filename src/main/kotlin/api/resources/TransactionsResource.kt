@@ -26,7 +26,7 @@ fun Routing.transactions(
 
             val originAccount = accountService.findAccountById(accountId)
 
-            if(originAccount.isPresent.not()) {
+            if (originAccount.isPresent.not()) {
                 call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "Origin Account not found."))
                 return@post
             }
@@ -35,7 +35,7 @@ fun Routing.transactions(
 
             val destinyAccount = accountService.findAccount(requestBody.destiny.email)
 
-            if(destinyAccount.isPresent.not()) {
+            if (destinyAccount.isPresent.not()) {
                 call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to "Destiny Account not found."))
                 return@post
             }
@@ -55,8 +55,5 @@ fun Routing.transactions(
                 call.respond(HttpStatusCode.MethodNotAllowed, mapOf("error" to e.message))
             }
         }
-
     }
-
-
 }

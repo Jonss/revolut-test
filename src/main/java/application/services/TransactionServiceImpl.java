@@ -2,7 +2,11 @@ package application.services;
 
 import domain.exceptions.BalanceException;
 import domain.exceptions.EntityNotFoundException;
-import domain.models.*;
+import domain.models.Account;
+import domain.models.Currency;
+import domain.models.Operation;
+import domain.models.Transaction;
+import domain.models.Balance;
 import infrastructure.repositories.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         transactions.stream()
                 .peek(t -> transactionRepository.save(t))
-                .forEach(t -> balanceService.append(t));
+                .forEach(t -> balanceService.append(t)); // TODO balance service should be an Observer...
 
         return transactions;
     }
