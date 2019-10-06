@@ -1,9 +1,11 @@
 package application
 
 import api.resources.accounts
+import api.resources.balances
 import api.resources.fund
 import api.resources.transactions
 import application.services.AccountService
+import application.services.BalanceService
 import application.services.TransactionService
 import com.fasterxml.jackson.databind.ObjectMapper
 import infrastructure.config.FlywayConfig
@@ -39,10 +41,12 @@ fun Application.module() {
 
     val accountService: AccountService by inject()
     val transactionService: TransactionService by inject()
+    val balanceService: BalanceService by inject()
 
     routing {
         accounts(accountService)
         fund(transactionService, accountService)
         transactions(transactionService, accountService)
+        balances(balanceService, accountService)
     }
 }
