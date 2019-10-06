@@ -1,4 +1,4 @@
-package application.services.base
+package integration.base
 
 import infrastructure.config.AppDataSource
 import infrastructure.config.FlywayConfig
@@ -19,9 +19,10 @@ open class IntegrationTestBase {
         accountRepository = AccountRepository(jdbiTest())
         transactionRepository = TransactionRepository(jdbiTest())
         balanceRepository = BalanceRepository(jdbiTest())
+        migrate()
     }
 
-    fun migrate() = FlywayConfig().migrate(testDataSource())
+    private fun migrate() = FlywayConfig().migrate(testDataSource())
 
     private fun testDataSource() = AppDataSource().dataSourceTest()
 

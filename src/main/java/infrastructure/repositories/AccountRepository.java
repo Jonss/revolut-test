@@ -44,9 +44,15 @@ public class AccountRepository {
                 "WHERE email = :email;";
 
         try {
-            return jdbi.withHandle(handle ->
-               handle.createQuery(query).bind("email", email).mapToBean(Account.class).findFirst()
+            Optional<Account> optionalAccount = jdbi.withHandle(handle ->
+                    handle.createQuery(query).bind("email", email).mapToBean(Account.class).findFirst()
             );
+
+            if(!optionalAccount.isPresent()) {
+                throw new EntityNotFoundException("Account not found.");
+            }
+
+            return optionalAccount;
         } catch (Exception e) {
             throw new EntityNotFoundException("Account not found.");
         }
@@ -60,9 +66,15 @@ public class AccountRepository {
                 "WHERE external_id = :externalId";
 
         try {
-            return jdbi.withHandle(handle ->
+            Optional<Account> optionalAccount = jdbi.withHandle(handle ->
                     handle.createQuery(query).bind("externalId", externalId).mapToBean(Account.class).findFirst()
             );
+
+            if(!optionalAccount.isPresent()) {
+                throw new EntityNotFoundException("Account not found.");
+            }
+
+            return optionalAccount;
         } catch (Exception e) {
             throw new EntityNotFoundException("Account not found.");
         }

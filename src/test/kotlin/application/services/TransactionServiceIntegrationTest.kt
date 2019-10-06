@@ -1,8 +1,8 @@
 package application.services
 
-import application.services.base.IntegrationTestBase
 import domain.exceptions.BalanceException
 import domain.models.Currency
+import integration.base.IntegrationTestBase
 import kotlinx.coroutines.delay
 import org.junit.Assert.assertEquals
 import org.junit.jupiter.api.Assertions
@@ -18,7 +18,6 @@ open class TransactionServiceIntegrationTest : IntegrationTestBase() {
 
     @BeforeEach
     fun setUp() {
-        migrate()
         accountService = AccountServiceImpl(accountRepository)
         balanceService = BalanceServiceImpl(balanceRepository)
         transactionService = TransactionServiceImpl(transactionRepository, accountService, balanceService)

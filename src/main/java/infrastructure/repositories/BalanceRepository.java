@@ -42,7 +42,11 @@ public class BalanceRepository {
 
     public List<Balance> findAllBalance(Account account) {
         try {
-            String query = "SELECT * FROM balances WHERE account_id = :accountId";
+            String query = "SELECT DISTINCT ON(currency)" +
+                    "id, total, last_deposit, currency, account_id FROM balances " +
+                    "WHERE account_id = :accountId " +
+                    "GROUP BY currency, id " +
+                    "ORDER BY currency, last_deposit DESC";
 
             return jdbi.withHandle(handle ->
                     handle.createQuery(query)
@@ -51,6 +55,7 @@ public class BalanceRepository {
                             .list()
             );
         } catch (Exception e) {
+            logger.info("Account has no balance. Response empty list.");
             return new ArrayList<>();
         }
     }

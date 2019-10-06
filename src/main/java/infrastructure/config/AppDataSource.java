@@ -33,5 +33,4 @@ public class AppDataSource {
         return new HikariDataSource( config );
     }
 
-
 }
