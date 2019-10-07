@@ -17,6 +17,7 @@ You can start the main method in Application.kt, or generate a jar with `./gradl
 
 *** 
 - Yet about transaction, my idea was handle a transaction as an event. Receive a transaction, add a new row and subtract. 
+- I didn't handle validations in requestBody fields, so if the field is not a nullable an exception will occur.
 
 
 ## Requests:
