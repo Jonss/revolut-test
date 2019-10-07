@@ -2,6 +2,7 @@ package infrastructure.repositories
 
 import domain.exceptions.EntityNotFoundException
 import integration.base.IntegrationTestBase
+import org.junit.Assert
 import java.util.UUID
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -47,16 +48,16 @@ class AccountRepositoryTest : IntegrationTestBase() {
     }
 
     @Test
-    fun `should throw exception when account is searched by an unknown email`() {
-        Assertions.assertThrows(EntityNotFoundException::class.java) {
-            accountRepository.findAccountByEmail("marte.machado@gmail.com")
-        }
+    fun `should assert that account is not present when account is searched by an unknown email`() {
+        val optionalAccount = accountRepository.findAccountByEmail("marte.machado@gmail.com")
+
+        Assert.assertFalse(optionalAccount.isPresent)
     }
 
     @Test
-    fun `should throw exception when account is searched by an unknown externalId`() {
-        Assertions.assertThrows(EntityNotFoundException::class.java) {
-            accountRepository.findAccountByExternalId(UUID.randomUUID().toString()).get()
-        }
+    fun `should assert that account is not present when account is searched by an unknown externalId`() {
+        val optionalAccount = accountRepository.findAccountByExternalId(UUID.randomUUID().toString())
+
+        Assert.assertFalse(optionalAccount.isPresent)
     }
 }

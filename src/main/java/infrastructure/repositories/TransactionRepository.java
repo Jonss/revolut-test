@@ -3,9 +3,14 @@ package infrastructure.repositories;
 import domain.exceptions.TransactionNotExecutedException;
 import domain.models.Transaction;
 import org.jdbi.v3.core.Jdbi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.CompletableFuture;
 
 public class TransactionRepository {
 
+    private Logger logger = LoggerFactory.getLogger(TransactionRepository.class);
     private Jdbi jdbi;
 
     public TransactionRepository(Jdbi jdbi) {
@@ -34,5 +39,10 @@ public class TransactionRepository {
         }catch (Exception e) {
             throw new TransactionNotExecutedException();
         }
+    }
+
+    public CompletableFuture<Transaction> asyncSave(Transaction transaction) {
+        logger.info("Tx async save " + Thread.currentThread().getName());
+        return CompletableFuture.completedFuture(save(transaction));
     }
 }

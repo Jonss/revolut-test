@@ -22,9 +22,14 @@ class BalanceServiceImpl(private val balanceRepository: BalanceRepository) : Bal
     }
 
     override fun append(transaction: Transaction) {
+        logger.info("Append {} {} to Account [{}]", transaction.currency, transaction.amount, transaction.destiny.externalId)
+        balanceRepository.append(transaction)
+    }
+
+    override fun asyncAppend(transaction: Transaction) {
         GlobalScope.async {
-            logger.info("Append {} {} to Account [{}] ${Thread.currentThread().name}", transaction.currency, transaction.amount, transaction.destiny.externalId)
-            balanceRepository.append(transaction)
+            logger.info("Async at ${Thread.currentThread().name}")
+            append(transaction)
         }
     }
 }

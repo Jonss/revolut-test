@@ -2,11 +2,7 @@ package application.services;
 
 import domain.exceptions.BalanceException;
 import domain.exceptions.EntityNotFoundException;
-import domain.models.Account;
-import domain.models.Balance;
-import domain.models.Transaction;
-import domain.models.Currency;
-import domain.models.Operation;
+import domain.models.*;
 import infrastructure.repositories.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,17 +52,26 @@ public class TransactionServiceImpl implements TransactionService {
 
         logger.info("Transfer {} {} from [{}] to [{}]", currency, amount, origin.getExternalId(), destiny.getExternalId());
 
-        Transaction withdrawal = new Transaction(amount, origin, destiny, Operation.TRANSFER, currency);
-        Transaction transfer = new Transaction(amount, destiny, origin, Operation.WITHDRAWAL, currency);
+        Transaction withdrawal = new Transaction(amount, destiny, origin, Operation.WITHDRAWAL, currency);
+        Transaction transfer = new Transaction(amount, origin, destiny, Operation.TRANSFER, currency);
 
-        List<Transaction> transactions = Arrays.asList(transfer, withdrawal);
+        handleWithdrawal(withdrawal);
+        handleTransfer(transfer);
 
-        transactions.stream()
-                .peek(t -> transactionRepository.save(t))
-                .forEach(t -> balanceService.append(t)); // TODO balance service should be an Observer...
-
-        return transactions;
+        return Arrays.asList(transfer, withdrawal);
     }
+
+    private void handleTransfer(Transaction transaction) {
+         transactionRepository.save(transaction);
+         balanceService.append(transaction);
+    }
+
+    private void handleWithdrawal(Transaction transaction) {
+        transactionRepository.asyncSave(transaction);
+        balanceService.asyncAppend(transaction);
+    }
+
+
 
     private boolean hasNoBalance(Long amount, Balance balance) {
         return balance.getTotal() == null || balance.getTotal() < amount;

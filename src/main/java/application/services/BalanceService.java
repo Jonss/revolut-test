@@ -15,4 +15,5 @@ public interface BalanceService {
 
     void append(Transaction transaction);
 
+    void asyncAppend(Transaction transaction);
 }

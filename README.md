@@ -5,7 +5,7 @@ This is a home task for Revolut job application.
 
 ### How to run?
 
-You can start the main method in Application.kt, or generate a jar with `./gradlew build` the run `java -jar build/libs/revolut-test-1.0-SNAPSHOT.jar`.
+You can start the main method in Application.kt, or generate a jar with `./gradlew build` the run `java -jar build/libs/revolut-test-1.0-SNAPSHOT-all.jar`.
 
 ### Considerations:
 
@@ -17,7 +17,6 @@ You can start the main method in Application.kt, or generate a jar with `./gradl
 
 *** 
 - Yet about transaction, my idea was handle a transaction as an event. Receive a transaction, add a new row and subtract. To handle concurrency I intended to verify asynchronously if the balance is positive or zero. 
-If two transactions where effectivate at same time, with an old balance, I want to make a new transaction, cancelling the last transaction persisted with a refund status. I had no time to code this verification feature =/.
 
 ## Requests:
 
@@ -53,17 +52,6 @@ curl -X GET http://localhost:8080/accounts/{email-registered} \
 #### Deposit value for account 
 
 ```
-curl -X POST http://localhost:8080/deposit \
--H 'Content-Type: application/json' \
--d '{
-	"value": {
-		"amount": 10000,
-		"currency": "BRL"
-	},
-	"account": {
-		"email": "joaosantana.ti@gmail.com"
-	}
-}'
 ```
 
 #### Transfer values for other users
