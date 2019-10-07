@@ -16,7 +16,8 @@ You can start the main method in Application.kt, or generate a jar with `./gradl
 - The amount is in cents. Even cryptocurrency would work, handling satoshis in BTC for instance.
 
 *** 
-- Yet about transaction, my idea was handle a transaction as an event. Receive a transaction, add a new row and subtract. To handle concurrency I intended to verify asynchronously if the balance is positive or zero. 
+- Yet about transaction, my idea was handle a transaction as an event. Receive a transaction, add a new row and subtract. 
+
 
 ## Requests:
 
@@ -49,9 +50,22 @@ curl -X GET http://localhost:8080/accounts/{email-registered} \
     -H 'Content-Type: application/json'
 ```
 
-#### Deposit value for account 
-
+#### Fund account -- Not safe, test only purposes.
+    
 ```
+curl -X POST \
+  http://localhost:8080/fund \
+  -H 'content-type: application/json' \
+  -d '{
+	"value": {
+		"amount": 10000,
+		"currency": "BRL"
+	},
+	"account": {
+		"email": "joaosantana@mail.com"
+	}
+}'
+
 ```
 
 #### Transfer values for other users
