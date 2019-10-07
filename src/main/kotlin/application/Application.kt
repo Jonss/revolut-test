@@ -15,9 +15,9 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.jackson.JacksonConverter
 import io.ktor.routing.routing
-import javax.sql.DataSource
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
+import javax.sql.DataSource
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 

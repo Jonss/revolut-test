@@ -61,14 +61,24 @@ public class TransactionServiceImpl implements TransactionService {
         return Arrays.asList(transfer, withdrawal);
     }
 
+    // Transfer can be async, because amount was already taken
     private void handleTransfer(Transaction transaction) {
-         transactionRepository.save(transaction);
-         balanceService.append(transaction);
-    }
-
-    private void handleWithdrawal(Transaction transaction) {
+        logger.info("Add [{} {}] from [{}] to [{}]", transaction.getCurrency(),
+                transaction.getAmount(),
+                transaction.getOrigin().getExternalId(),
+                transaction.getDestiny().getExternalId());
         transactionRepository.asyncSave(transaction);
         balanceService.asyncAppend(transaction);
+    }
+
+    // Withdrawal must be sync, to take as soon amout is asked
+    private void handleWithdrawal(Transaction transaction) {
+        logger.info("Withdrawal [{} {}] from [{}] to [{}]", transaction.getCurrency(),
+                transaction.getAmount(),
+                transaction.getOrigin().getExternalId(),
+                transaction.getDestiny().getExternalId());
+        transactionRepository.save(transaction);
+        balanceService.append(transaction);
     }
 
 

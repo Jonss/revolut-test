@@ -1,15 +1,13 @@
 package infrastructure.repositories
 
-import domain.exceptions.EntityNotFoundException
 import integration.base.IntegrationTestBase
 import org.junit.Assert
-import java.util.UUID
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import stubs.AccountStub
+import java.util.UUID
 
 class AccountRepositoryTest : IntegrationTestBase() {
 
